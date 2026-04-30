@@ -2,7 +2,7 @@ name: Build & cache images
 
 on:
   push:
-    branches: [dev, main, feature/version-v1.0.0-rc.1]
+    branches: [dev, main]
     paths:
       - "docker/Dockerfile"
       - "docker/run-test.sh"
@@ -32,7 +32,7 @@ jobs:
           - { gnome: 49, fedora: 43 }
           - { gnome: 50, fedora: 44 }
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       - name: Install podman
         run: sudo apt-get update && sudo apt-get install -y podman
