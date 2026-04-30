@@ -2,7 +2,7 @@ name: Build & cache images
 
 on:
   push:
-    branches: [dev, main]
+    branches: [dev, main, feature/version-v1.0.0-rc.1]
     paths:
       - "docker/Dockerfile"
       - "docker/run-test.sh"
