@@ -1,12 +1,12 @@
-# GitLab Counter
+# GNOME Gitlab Counter
 
 [![E2E](https://github.com/spaaleks/gnome-gitlab-counter/actions/workflows/e2e.yml/badge.svg)](https://github.com/spaaleks/gnome-gitlab-counter/actions/workflows/e2e.yml)
 [![Build images](https://github.com/spaaleks/gnome-gitlab-counter/actions/workflows/build-images.yml/badge.svg)](https://github.com/spaaleks/gnome-gitlab-counter/actions/workflows/build-images.yml)
 [![Release](https://github.com/spaaleks/gnome-gitlab-counter/actions/workflows/release.yml/badge.svg)](https://github.com/spaaleks/gnome-gitlab-counter/actions/workflows/release.yml)
 
-GNOME Shell extension that puts GitLab counters in your top bar: open issues, draft MRs, MRs ready for review, reviews assigned to you. One indicator per counter, your numbers at a glance, click to jump to the matching dashboard.
+GNOME Shell extension that puts Gitlab counters in your top bar: open issues, draft MRs, MRs ready for review, reviews assigned to you. One indicator per counter, your numbers at a glance, click to jump to the matching dashboard.
 
-- Multiple GitLab instances side by side
+- Multiple Gitlab instances side by side
 - Custom icons per counter (drop in your own SVGs)
 - Threshold alerts that blink when something stacks up
 - Tokens stored in GNOME Keyring, never in plain config
@@ -15,7 +15,7 @@ GNOME Shell extension that puts GitLab counters in your top bar: open issues, dr
 
 ## Install
 
-The recommended path is [extensions.gnome.org](https://extensions.gnome.org/). Search for **GitLab Counter** and toggle it on.
+The recommended path is [extensions.gnome.org](https://extensions.gnome.org/). Search for **Gitlab Counter** and toggle it on.
 
 Manual install (e.g. on offline machines):
 
@@ -39,11 +39,11 @@ Open the preferences window:
 gnome-extensions prefs gitlabcounter@spaaleks.com
 ```
 
-For each GitLab instance you set:
+For each Gitlab instance you set:
 
 - **Name** | label shown in tooltips
 - **Base URL** | `https://gitlab.example.com`
-- **Username** | your GitLab username
+- **Username** | your Gitlab username
 - **Personal access token** | needs `read_api` scope; stored in GNOME Keyring
 - **Prefix label** or **Icon** | shown to the left of the counters in the panel
 - **Panel position** | where the indicators sit (see table below)
@@ -51,7 +51,7 @@ For each GitLab instance you set:
 For each counter inside an instance:
 
 - **Glyph** or **Icon file** | what shows in the panel; icons override the glyph
-- **API path / URL** | the GitLab REST query whose `count` (or list length) becomes the panel number
+- **API path / URL** | the Gitlab REST query whose `count` (or list length) becomes the panel number
 - **Target URL** | opens in your browser when the counter is clicked
 - **Warn / Critical thresholds + colors** | blink when the count crosses the value (blank thresholds disable the alert)
 
@@ -74,7 +74,7 @@ Both **API path** and **Target URL** support `{base}` (instance URL) and `{user}
 
 ## Recipes
 
-Drop these into a counter under any instance. They use `{base}` and `{user}`, so the same counter works on any GitLab once you've set the instance username.
+Drop these into a counter under any instance. They use `{base}` and `{user}`, so the same counter works on any Gitlab once you've set the instance username.
 
 **My open issues**
 

@@ -1,0 +1,28 @@
+.glcounter-label {
+    font-feature-settings: "tnum";
+    font-size: 13px;
+    padding: 0 4px;
+}
+
+.glcounter-prefix {
+    font-weight: 700;
+    font-size: 12px;
+    padding: 0 4px;
+}
+
+.glcounter-logo {
+    padding: 0 2px;
+}
+
+.glcounter-center-btn {
+    padding: 0 6px;
+}
+
+.glcounter-tooltip {
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}

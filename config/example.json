@@ -1,0 +1,38 @@
+{
+  "instances": [
+    {
+      "name": "my-gitlab",
+      "url": "https://gitlab.example.com",
+      "username": "yourusername",
+      "token": "",
+      "label": "Gitlab",
+      "position": "right-start",
+      "counters": [
+        {
+          "glyph": "⎔",
+          "iconPath": "issue.svg",
+          "apiPath": "/api/v4/issues?state=opened&assignee_username={user}&scope=all&per_page=100",
+          "targetUrl": "{base}/dashboard/work_items?sort=updated_desc&state=opened&assignee_username%5B%5D={user}"
+        },
+        {
+          "glyph": "✎",
+          "apiPath": "/api/v4/merge_requests?scope=all&state=opened&author_username={user}&wip=yes&per_page=100",
+          "targetUrl": "{base}/dashboard/merge_requests/search?scope=all&state=opened&author_username={user}&draft=yes"
+        },
+        {
+          "glyph": "⇄",
+          "apiPath": "/api/v4/merge_requests?scope=all&state=opened&author_username={user}&wip=no&per_page=100",
+          "targetUrl": "{base}/dashboard/merge_requests/search?scope=all&state=opened&author_username={user}&draft=no"
+        },
+        {
+          "glyph": "👁",
+          "apiPath": "/api/v4/merge_requests?state=opened&scope=all&reviewer_username={user}&not%5Bapproved_by_usernames%5D%5B%5D={user}&wip=no&per_page=100",
+          "targetUrl": "{base}/dashboard/merge_requests/search?draft=no&not%5Bapproved_by_usernames%5D%5B%5D={user}&reviewer_username={user}&scope=all&state=opened",
+          "threshold": 5,
+          "alertColor": "#ff5555"
+        }
+      ]
+    }
+  ],
+  "poll_interval": 300
+}

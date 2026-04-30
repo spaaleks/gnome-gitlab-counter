@@ -1,0 +1,52 @@
+name: Build & cache images
+
+on:
+  push:
+    branches: [dev, main]
+    paths:
+      - "docker/Dockerfile"
+      - "docker/run-test.sh"
+      - ".github/workflows/build-images.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # weekly Monday refresh
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { gnome: 42, fedora: 36 }
+          - { gnome: 43, fedora: 37 }
+          - { gnome: 44, fedora: 38 }
+          - { gnome: 45, fedora: 39 }
+          - { gnome: 46, fedora: 40 }
+          - { gnome: 47, fedora: 41 }
+          - { gnome: 48, fedora: 42 }
+          - { gnome: 49, fedora: 43 }
+          - { gnome: 50, fedora: 44 }
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install podman
+        run: sudo apt-get update && sudo apt-get install -y podman
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build
+        run: |
+          IMAGE="ghcr.io/${{ github.repository }}/gnome-ext-test:${{ matrix.gnome }}"
+          podman build \
+            --build-arg FEDORA_VERSION=${{ matrix.fedora }} \
+            -t "$IMAGE" \
+            -f docker/Dockerfile .
+
+      - name: Push
+        run: podman push "ghcr.io/${{ github.repository }}/gnome-ext-test:${{ matrix.gnome }}"

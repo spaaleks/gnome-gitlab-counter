@@ -1,0 +1,19 @@
+{
+  "uuid": "gitlabcounter@spaaleks.com",
+  "name": "Gitlab Counter",
+  "description": "Shows counters for Gitlab merge requests, drafts, and review requests in the top bar.",
+  "shell-version": [
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50"
+  ],
+  "settings-schema": "org.gnome.shell.extensions.glcounter",
+  "url": "http://spaaleks.com/",
+  "version": 1
+}

@@ -1,0 +1,4 @@
+[
+  {"id": 201, "iid": 1, "project_id": 1, "title": "Mock draft 1", "work_in_progress": true},
+  {"id": 202, "iid": 2, "project_id": 1, "title": "Mock draft 2", "work_in_progress": true}
+]

@@ -1,0 +1,7 @@
+config/local.json
+schemas/gschemas.compiled
+tmp/
+dist/
+docs/
+tests/visual/node_modules/
+tests/visual/package-lock.json

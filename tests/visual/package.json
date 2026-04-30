@@ -1,0 +1,11 @@
+{
+  "name": "glcounter-visual-diff",
+  "private": true,
+  "type": "module",
+  "description": "Visual regression check for the GNOME e2e harness.",
+  "dependencies": {
+    "pixelmatch": "^7.1.0",
+    "pngjs": "^7.0.0",
+    "sharp": "^0.34.1"
+  }
+}
