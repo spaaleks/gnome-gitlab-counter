@@ -1,0 +1,47 @@
+name: Build EGO zips
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install jq + zip
+        run: sudo apt-get update && sudo apt-get install -y jq zip
+
+      - name: Set up Python (for shexli)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Build EGO zips
+        run: ./bin/build-ego-zip.sh
+
+      - name: Lint with shexli
+        run: |
+          pip install -U shexli
+          shexli dist/glcounter-esm.zip
+          shexli dist/glcounter-legacy.zip
+
+      - name: Upload zips as workflow artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: ego-zips
+          path: dist/*.zip
+          retention-days: 30
+
+      - name: Attach to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          fail_on_unmatched_files: true

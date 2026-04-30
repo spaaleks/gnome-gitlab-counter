@@ -1,0 +1,53 @@
+name: E2E across GNOME versions
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        gnome: [42, 43, 44, 45, 46, 47, 48, 49, 50]
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install podman
+        run: sudo apt-get update && sudo apt-get install -y podman
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Pull cached image
+        run: |
+          podman pull "ghcr.io/${{ github.repository }}/gnome-ext-test:${{ matrix.gnome }}"
+          podman tag "ghcr.io/${{ github.repository }}/gnome-ext-test:${{ matrix.gnome }}" "gnome-ext-test:${{ matrix.gnome }}"
+
+      - name: Run e2e
+        run: ./bin/test-version.sh ${{ matrix.gnome }}
+
+      - name: Set up Node (for visual diff)
+        if: always()
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: Install visual-diff deps
+        if: always()
+        run: npm install --prefix tests/visual --silent
+
+      - name: Visual regression
+        if: always()
+        run: ./bin/visual-diff.sh ${{ matrix.gnome }}
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: gnome-${{ matrix.gnome }}-artifacts
+          path: tmp/artifacts/${{ matrix.gnome }}/
+          retention-days: 14

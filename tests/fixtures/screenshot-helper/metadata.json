@@ -1,0 +1,14 @@
+{
+  "uuid": "screenshot-helper@e2e.local",
+  "name": "E2E Screenshot Helper",
+  "description": "E2E Screenshot Helper",
+  "shell-version": [
+    "46",
+    "47",
+    "48",
+    "49",
+    "50"
+  ],
+  "url": "",
+  "version": 1
+}
