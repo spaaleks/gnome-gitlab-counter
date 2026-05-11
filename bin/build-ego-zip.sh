@@ -23,6 +23,7 @@ stage_variant() {
     cp -r icons "$stage/"
     cp stylesheet.css labels.json "$stage/"
     cp schemas/*.gschema.xml "$stage/schemas/"
+    glib-compile-schemas "$stage/schemas/"
 
     if [ "$variant" = "legacy" ]; then
         cp extension-legacy.js "$stage/extension.js"

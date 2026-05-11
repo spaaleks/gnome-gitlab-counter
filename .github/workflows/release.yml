@@ -15,8 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install jq + zip
-        run: sudo apt-get update && sudo apt-get install -y jq zip
+      - name: Install jq + zip + glib-compile-schemas
+        run: sudo apt-get update && sudo apt-get install -y jq zip libglib2.0-bin
 
       - name: Set up Python (for shexli)
         uses: actions/setup-python@v5
