@@ -6,6 +6,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 
 let _window = null;
 const USER_ICON_DIR = GLib.get_user_data_dir() + '/glcounter/icons';
+const _liveDialogs = new Set();
 
 const SCHEMA = 'org.gnome.shell.extensions.glcounter';
 
@@ -42,7 +43,7 @@ function _instanceKey(inst) {
     return (inst.url || inst.name || 'default').trim();
 }
 
-function init() {}
+function init() { }
 
 function _getInstances(settings) {
     try {
@@ -85,7 +86,7 @@ function fillPreferencesWindow(window) {
     const rebuild = () => {
         instanceRows.forEach(r => group.remove(r));
         instanceRows = [];
-        try { group.remove(addInstanceRow); } catch (_) {}
+        try { group.remove(addInstanceRow); } catch (_) { }
 
         _getInstances(settings).forEach((inst, idx) => {
             const row = _instanceRow(settings, inst, idx, rebuild);
@@ -148,6 +149,7 @@ function _doExport(settings) {
         accept_label: L('dialog.export.accept'),
         cancel_label: L('common.cancel'),
     });
+    _liveDialogs.add(dialog);
     dialog.set_current_name('glcounter-config.json');
     const filter = new Gtk.FileFilter();
     filter.set_name(L('common.json'));
@@ -172,6 +174,7 @@ function _doExport(settings) {
                 logError(e, 'GLCounter: export failed');
             }
         }
+        _liveDialogs.delete(d);
         d.destroy();
     });
     dialog.show();
@@ -185,6 +188,7 @@ function _doImport(settings, rebuild) {
         accept_label: L('dialog.import.accept'),
         cancel_label: L('common.cancel'),
     });
+    _liveDialogs.add(dialog);
     const filter = new Gtk.FileFilter();
     filter.set_name(L('common.json'));
     filter.add_pattern('*.json');
@@ -208,7 +212,7 @@ function _doImport(settings, rebuild) {
                                 _getSchema(), { instance: key },
                                 Secret.COLLECTION_DEFAULT,
                                 `GLCounter token: ${inst.name || ''}`,
-                                token, null, () => {},
+                                token, null, () => { },
                             );
                             inst.token = '';
                         }
@@ -228,6 +232,7 @@ function _doImport(settings, rebuild) {
                 logError(e, 'GLCounter: import failed');
             }
         }
+        _liveDialogs.delete(d);
         d.destroy();
     });
     dialog.show();
@@ -259,7 +264,7 @@ function _instanceRow(settings, inst, idx, rebuild) {
         arr[idx][key] = val;
         _setInstances(settings, arr);
         if (key === 'name') row.set_title(val || L('instance.titleFallback', idx + 1));
-        if (key === 'url')  row.set_subtitle(val || L('common.noUrl'));
+        if (key === 'url') row.set_subtitle(val || L('common.noUrl'));
     };
 
     row.add_row(_entryRow(L('instance.fields.name'), inst.name || '', v => updateInst('name', v)));
@@ -388,7 +393,7 @@ function _secretTokenRow(inst) {
         try {
             const token = Secret.password_lookup_finish(result);
             if (token) entry.set_text(token);
-        } catch (_) {}
+        } catch (_) { }
     });
 
     const commit = () => {
@@ -398,10 +403,10 @@ function _secretTokenRow(inst) {
                 _getSchema(), { instance: key },
                 Secret.COLLECTION_DEFAULT,
                 `GLCounter token: ${inst.name || ''}`,
-                value, null, () => {},
+                value, null, () => { },
             );
         } else {
-            Secret.password_clear(_getSchema(), { instance: key }, null, () => {});
+            Secret.password_clear(_getSchema(), { instance: key }, null, () => { });
         }
     };
     entry.connect('activate', commit);
@@ -449,7 +454,7 @@ function _listAvailableIcons() {
                 const name = info.get_name();
                 if (name.toLowerCase().endsWith('.svg')) result.add(name);
             }
-        } catch (_) {}
+        } catch (_) { }
     }
     return Array.from(result).sort();
 }
@@ -458,7 +463,7 @@ function _resolveIconPathForPreview(filename) {
     const userPath = USER_ICON_DIR + '/' + filename;
     try {
         if (Gio.File.new_for_path(userPath).query_exists(null)) return userPath;
-    } catch (_) {}
+    } catch (_) { }
     const Me = ExtensionUtils.getCurrentExtension();
     return Me.path + '/icons/' + filename;
 }
@@ -493,7 +498,7 @@ function _tintedPreviewPath(sourcePath) {
             srcInfo.get_attribute_uint64('time::modified')) {
             return cached;
         }
-    } catch (_) {}
+    } catch (_) { }
 
     try {
         GLib.file_set_contents(cached, text.replace(/currentColor/gi, color));
@@ -580,6 +585,7 @@ function _iconPickerRow(title, current, onChange) {
             accept_label: L('dialog.icon.accept'),
             cancel_label: L('common.cancel'),
         });
+        _liveDialogs.add(dialog);
         const filter = new Gtk.FileFilter();
         filter.set_name(L('dialog.icon.filterName'));
         filter.add_pattern('*.svg');
@@ -598,6 +604,7 @@ function _iconPickerRow(title, current, onChange) {
                     logError(e, 'GLCounter: icon upload failed');
                 }
             }
+            _liveDialogs.delete(d);
             d.destroy();
         });
         dialog.show();
